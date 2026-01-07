@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HsmCryptExampleApplication<hsmcrypt-example>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "io.github.prometheuskr.hsmcrypt.example.HsmCryptExampleApplication",
+            "projectName": "hsmcrypt-example",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

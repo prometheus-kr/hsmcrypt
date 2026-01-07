@@ -1,0 +1,26 @@
+# Spring Boot Configuration
+spring:
+  main:
+    web-application-type: none
+  application:
+    name: hsmcrypt-example
+
+# Sipwon HSM Configuration (provided by sipwon-spring-boot-starter)
+sipwon:
+  pkcs11-library-path: /Program Files/Safenet/ProtectToolkit 7/C SDK/bin/sw/cryptoki.dll
+  token-label-and-pin:
+    - token-label: HSMCRYPT
+      pin: 1111
+
+# HsmCrypt Encryption Configuration
+hsmcrypt:
+  # Enable encryption feature
+  encryption:
+    enabled: true
+    token-label: "HSMCRYPT"
+    key-label: "HsmCryptKey" # ctkmu c -sn -z256 -taes -nHsmCryptKey -aPTED
+
+# Application Secrets (example of encrypted value)
+app:
+  plain: 1234 # plain value
+  encrypted: HCENC(F459686FE10314CB43FDE8C3C49E55FC) # encrypted value
