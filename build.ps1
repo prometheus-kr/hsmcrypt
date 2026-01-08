@@ -8,11 +8,22 @@ Write-Host "HsmCrypt Multi-Module Build" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
+# Set JAVA_HOME to JDK 17 if available
+$jdk17Path = "C:\d\dev\jdk-17"
+if (Test-Path $jdk17Path) {
+    $env:JAVA_HOME = $jdk17Path
+    $env:Path = "$jdk17Path\bin;$env:Path"
+    Write-Host "JAVA_HOME set to $jdk17Path" -ForegroundColor Cyan
+} else {
+    Write-Host "Warning: JDK 17 not found at $jdk17Path. Using system default JAVA_HOME." -ForegroundColor Yellow
+}
+Write-Host ""
+
+
 $modules = @("hsmcrypt", "hsmcrypt-example")
 $buildCommand = "mvn clean install -DskipTests"
 
 $successCount = 0
-$failedModules = @()
 
 foreach ($module in $modules) {
     $moduleNumber = $modules.IndexOf($module) + 1
@@ -39,7 +50,8 @@ foreach ($module in $modules) {
         Write-Host ""
         Write-Host "✗ $module - Build failed: $_" -ForegroundColor Red
         Write-Host ""
-        $failedModules += $module
+        Pop-Location
+        exit 1
     }
     finally {
         Pop-Location
@@ -51,22 +63,7 @@ Write-Host "Build Summary" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Total modules: $($modules.Count)" -ForegroundColor White
 Write-Host "Successful: $successCount" -ForegroundColor Green
-Write-Host "Failed: $($failedModules.Count)" -ForegroundColor $(if ($failedModules.Count -gt 0) { "Red" } else { "Green" })
-
-if ($failedModules.Count -gt 0) {
-    Write-Host ""
-    Write-Host "Failed modules:" -ForegroundColor Red
-    foreach ($module in $failedModules) {
-        Write-Host "  - $module" -ForegroundColor Red
-    }
-    Write-Host ""
-    exit 1
-}
 
 Write-Host ""
 Write-Host "All modules built successfully!" -ForegroundColor Green
-Write-Host ""
-Write-Host "To run the example application:" -ForegroundColor Cyan
-Write-Host "  cd hsmcrypt-example" -ForegroundColor White
-Write-Host "  .\run.ps1" -ForegroundColor White
 Write-Host ""

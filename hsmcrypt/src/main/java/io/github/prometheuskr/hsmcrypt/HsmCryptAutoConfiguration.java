@@ -72,14 +72,15 @@ public class HsmCryptAutoConfiguration {
     }
 
     /**
-     * Creates EncryptablePropertyResolver bean for auto-decryption.
+     * Creates the property resolver for auto-decryption.
+     * <p>
+     * This bean is only created when encryption is enabled.
      * 
-     * @return EncryptablePropertyResolver instance
+     * @return an EncryptablePropertyResolver instance
      */
     @Bean
-    @ConditionalOnMissingBean(EncryptablePropertyResolver.class)
     @ConditionalOnProperty(prefix = "hsmcrypt.encryption", name = "enabled", havingValue = "true")
-    public static EncryptablePropertyResolver encryptablePropertyResolver() {
+    public EncryptablePropertyResolver encryptablePropertyResolver() {
         return new EncryptablePropertyResolver();
     }
 

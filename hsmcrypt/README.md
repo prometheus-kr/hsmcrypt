@@ -35,14 +35,14 @@ HsmCrypt focuses on **property encryption** rather than general-purpose encrypti
 <dependency>
     <groupId>io.github.prometheuskr</groupId>
     <artifactId>hsmcrypt</artifactId>
-    <version>1.8.0</version>
+    <version>1.17.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```gradle
-implementation 'io.github.prometheuskr:hsmcrypt:1.8.0'
+implementation 'io.github.prometheuskr:hsmcrypt:1.17.0'
 ```
 
 ## Quick Start
@@ -91,11 +91,11 @@ hsmcrypt.encryption.key-label=MY_ENCRYPTION_KEY
 
 ```bash
 # Encrypt a value
-java -jar hsmcrypt-1.8.0-exec.jar enc "MySecretPassword"
+java -jar hsmcrypt-1.17.0-exec.jar enc "MySecretPassword"
 # Output: HCENC(3f8a7b2c1d9e4f5a...)
 
 # Verify encryption
-java -jar hsmcrypt-1.8.0-exec.jar vrf "MySecretPassword:HCENC(3f8a7b2c...)"
+java -jar hsmcrypt-1.17.0-exec.jar vrf "MySecretPassword:HCENC(3f8a7b2c...)"
 # Output: Valid
 ```
 
@@ -176,7 +176,7 @@ cd hsmcrypt
 mvn clean package
 ```
 
-This generates `target/hsmcrypt-1.8.0-exec.jar` (executable JAR with dependencies).
+This generates `target/hsmcrypt-1.17.0-exec.jar` (executable JAR with dependencies).
 
 ### Commands
 
@@ -185,7 +185,7 @@ The CLI provides two commands:
 #### enc - Encrypt a value
 
 ```bash
-java -jar hsmcrypt-1.8.0-exec.jar enc "plaintext"
+java -jar hsmcrypt-1.17.0-exec.jar enc "plaintext"
 ```
 
 Output:
@@ -198,7 +198,7 @@ HCENC(3f8a7b2c1d9e4f5a...)
 Verifies that encrypted value matches plaintext:
 
 ```bash
-java -jar hsmcrypt-1.8.0-exec.jar vrf "plaintext:HCENC(3f8a7b2c...)"
+java -jar hsmcrypt-1.17.0-exec.jar vrf "plaintext:HCENC(3f8a7b2c...)"
 ```
 
 Output:
@@ -234,7 +234,7 @@ hsmcrypt:
 ```bash
 #!/bin/bash
 encrypt() {
-  java -jar hsmcrypt-1.8.0-exec.jar enc "$1"
+  java -jar hsmcrypt-1.17.0-exec.jar enc "$1"
 }
 
 DB_PASSWORD=$(encrypt "MySecretPassword")
@@ -245,7 +245,7 @@ echo "Encrypted: $DB_PASSWORD"
 ```powershell
 function Encrypt-Value {
     param([string]$value)
-    java -jar hsmcrypt-1.8.0-exec.jar enc $value
+    java -jar hsmcrypt-1.17.0-exec.jar enc $value
 }
 
 $dbPassword = Encrypt-Value "MySecretPassword"
