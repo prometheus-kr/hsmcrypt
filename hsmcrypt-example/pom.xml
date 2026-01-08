@@ -13,7 +13,7 @@
 
     <groupId>io.github.prometheus-kr</groupId>
     <artifactId>hsmcrypt-example</artifactId>
-    <version>1.0.0</version>
+    <version>1.8.0</version>
     <packaging>jar</packaging>
 
     <name>hsmcrypt-example</name>
@@ -38,13 +38,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Sipwon Spring Boot Starter (for HSM connectivity) -->
-        <dependency>
-            <groupId>io.github.prometheus-kr</groupId>
-            <artifactId>sipwon-spring-boot-starter</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-
         <!-- HsmCrypt Library -->
         <dependency>
             <groupId>io.github.prometheus-kr</groupId>
@@ -57,13 +50,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

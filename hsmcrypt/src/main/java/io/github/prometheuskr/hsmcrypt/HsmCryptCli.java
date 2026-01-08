@@ -1,15 +1,15 @@
 package io.github.prometheuskr.hsmcrypt;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Command-line interface for HsmCrypt encryption/verification operations.
@@ -213,7 +213,7 @@ public class HsmCryptCli implements CommandLineRunner {
 
         try {
             // Find the last HCENC( position (encrypted text is always at the end)
-            int hcencIndex = input.lastIndexOf("HCENC(");
+            int hcencIndex = input.lastIndexOf(HsmCryptProperties.DEFAULT_PREFIX);
             if (hcencIndex == -1) {
                 System.out.println("Invalid: HCENC() format not found");
                 System.exit(1);
@@ -231,7 +231,7 @@ public class HsmCryptCli implements CommandLineRunner {
             String encrypted = input.substring(colonIndex + 1);
 
             // Verify HCENC() format
-            if (!encrypted.endsWith(")")) {
+            if (!encrypted.endsWith(HsmCryptProperties.DEFAULT_SUFFIX)) {
                 System.out.println("Invalid: Encrypted part is not in HCENC() format");
                 System.exit(1);
             }
@@ -279,7 +279,8 @@ public class HsmCryptCli implements CommandLineRunner {
         System.out.println("  java -jar hsmcrypt.jar <command> <text>");
         System.out.println();
         System.out.println("Commands:");
-        System.out.println("  enc <text>                Encrypt text (outputs in HCENC(...) format)");
+        System.out.println("  enc <text>                Encrypt text (outputs in " + HsmCryptProperties.DEFAULT_PREFIX
+                + "..." + HsmCryptProperties.DEFAULT_SUFFIX + " format)");
         System.out.println("  vrf <plaintext:encrypted> Verify plaintext:encrypted pair");
         System.out.println("  help                      Show this help message");
         System.out.println("  version                   Show version information");
@@ -292,6 +293,7 @@ public class HsmCryptCli implements CommandLineRunner {
         System.out.println("  java -jar hsmcrypt.jar enc \"Hello World\"");
         System.out.println();
         System.out.println("  # Verify plaintext and encrypted value match");
-        System.out.println("  java -jar hsmcrypt.jar vrf \"Hello World:HCENC(...)\"");
+        System.out.println("  java -jar hsmcrypt.jar vrf \"Hello World:" + HsmCryptProperties.DEFAULT_PREFIX + "..."
+                + HsmCryptProperties.DEFAULT_SUFFIX + "\"");
     }
 }

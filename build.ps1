@@ -8,6 +8,18 @@ Write-Host "HsmCrypt Multi-Module Build" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
+# Set JAVA_HOME to JDK 1.8 if available
+$jdk8Path = "C:\d\dev\jdk-8x64"
+if (Test-Path $jdk8Path) {
+    $env:JAVA_HOME = $jdk8Path
+    $env:Path = "$jdk8Path\bin;$env:Path"
+    Write-Host "JAVA_HOME set to $jdk8Path" -ForegroundColor Cyan
+} else {
+    Write-Host "Warning: JDK 1.8 not found at $jdk8Path. Using system default JAVA_HOME." -ForegroundColor Yellow
+}
+Write-Host ""
+
+
 $modules = @("hsmcrypt", "hsmcrypt-example")
 $buildCommand = "mvn clean install -DskipTests"
 
