@@ -97,5 +97,4 @@ Apache License 2.0
 
 ## Links
 - [SIPWON GitHub](https://github.com/prometheus-kr/sipwon)
-- [API Javadoc](https://javadoc.io/doc/io.github.prometheuskr/hsmcrypt)
 - [Contact](mailto:prometheus@kakao.com)
