@@ -28,7 +28,7 @@ class EncryptablePropertyResolver implements BeanFactoryPostProcessor, Ordered {
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        ConfigurableEnvironment environment = beanFactory.getBean(ConfigurableEnvironment.class);
+        var environment = beanFactory.getBean(ConfigurableEnvironment.class);
 
         // Wrap all PropertySources with EncryptablePropertySourceWrapper
         // HsmCryptHelper is obtained lazily at actual usage time
@@ -76,8 +76,9 @@ class EncryptablePropertyResolver implements BeanFactoryPostProcessor, Ordered {
 
         @Override
         public Object getProperty(String name) {
-            Object value = delegate.getProperty(name);
-            if (value instanceof String) {
+            var value = delegate.getProperty(name);
+
+            if (value instanceof String strValue) {
                 // Lazy initialization of helper
                 if (helper == null) {
                     synchronized (this) {
@@ -91,7 +92,8 @@ class EncryptablePropertyResolver implements BeanFactoryPostProcessor, Ordered {
                         }
                     }
                 }
-                return helper.decryptIfEncrypted((String) value);
+
+                return helper.decryptIfEncrypted(strValue);
             }
             return value;
         }

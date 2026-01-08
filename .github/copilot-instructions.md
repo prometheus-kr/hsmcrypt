@@ -4,16 +4,16 @@ Java-based HSM (Hardware Security Module) encryption/decryption library
 
 ## Project Information
 
-- **Language**: Java 8
+- **Language**: Java 17
 - **Build Tool**: Maven
-- **Framework**: Spring Boot 2.7.18
+- **Framework**: Spring Boot 3.5.9
 - **Package**: io.github.prometheuskr.hsmcrypt
-- **Version**: 1.8.0
+- **Version**: 1.17.0
 
 ## Project Structure
 
 - Core library: `hsmcrypt/` (Maven project)
-- Package-private classes: HsmCrypt, HsmCryptHelper, StringEncryptor, EncryptablePropertyResolver
+- Package-private classes: HsmCrypt, HsmCryptHelper, EncryptablePropertyResolver
 - Public classes: HsmCryptAutoConfiguration, HsmCryptProperties, HsmCryptException, HsmCryptCli
 - Spring Boot auto-configuration support for property decryption
 - Example project: `hsmcrypt-example/` (demonstrates usage)
@@ -43,3 +43,4 @@ Java-based HSM (Hardware Security Module) encryption/decryption library
 - EncryptablePropertyResolver: BeanFactoryPostProcessor for automatic property decryption
 - Lazy initialization pattern for HsmCryptHelper to avoid circular dependencies
 - HSM integration via SIPWON library
+- Spring Boot 3.x: Uses `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` for auto-configuration (not spring.factories)
