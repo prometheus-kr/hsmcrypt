@@ -38,7 +38,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "io.github.prometheuskr")
 public class HsmCryptCli implements CommandLineRunner {
 
-    private static final String VERSION = "1.17.0";
+    private static final String VERSION = "1.21.0";
 
     private final HsmCryptHelper hsmCryptHelper;
 
@@ -100,28 +100,30 @@ public class HsmCryptCli implements CommandLineRunner {
      * @return YAML template content as string
      */
     private static String generateApplicationYmlTemplate() {
-        return "# Sipwon HSM Configuration (provided by sipwon-spring-boot-starter)\n" +
-                "sipwon:\n" +
-                "  # PKCS#11 library path\n" +
-                "  pkcs11-library-path: /Program Files/Safenet/ProtectToolkit 7/C SDK/bin/sw/cryptoki.dll\n" +
-                "  \n" +
-                "  # HSM token configuration\n" +
-                "  token-label-and-pin:\n" +
-                "    - token-label: HSMCRYPT\n" +
-                "      pin: 1111\n" +
-                "\n" +
-                "# HsmCrypt Encryption Configuration\n" +
-                "hsmcrypt:\n" +
-                "  # Enable encryption functionality\n" +
-                "  encryption:\n" +
-                "    enabled: true\n" +
-                "    token-label: \"HSMCRYPT\"\n" +
-                "    key-label: \"HsmCryptKey\"\n" +
-                "\n" +
-                "# Spring Boot Configuration\n" +
-                "spring:\n" +
-                "  main:\n" +
-                "    banner-mode: off\n";
+        return """
+                # Sipwon HSM Configuration (provided by sipwon-spring-boot-starter)
+                sipwon:
+                  # PKCS#11 library path
+                  pkcs11-library-path: /Program Files/Safenet/ProtectToolkit 7/C SDK/bin/sw/cryptoki.dll
+
+                  # HSM token configuration
+                  token-label-and-pin:
+                    - token-label: HSMCRYPT
+                      pin: 1111
+
+                # HsmCrypt Encryption Configuration
+                hsmcrypt:
+                  # Enable encryption functionality
+                  encryption:
+                    enabled: true
+                    token-label: "HSMCRYPT"
+                    key-label: "HsmCryptKey"
+
+                # Spring Boot Configuration
+                spring:
+                  main:
+                    banner-mode: off
+                """;
     }
 
     /**
@@ -148,26 +150,15 @@ public class HsmCryptCli implements CommandLineRunner {
         String command = args[0].toLowerCase();
 
         switch (command) {
-            case "enc":
-                handleEncrypt(args);
-                break;
-            case "vrf":
-                handleVerify(args);
-                break;
-            case "help":
-            case "-h":
-            case "--help":
-                printUsage();
-                break;
-            case "version":
-            case "-v":
-            case "--version":
-                System.out.println("HsmCrypt CLI version " + VERSION);
-                break;
-            default:
+            case "enc" -> handleEncrypt(args);
+            case "vrf" -> handleVerify(args);
+            case "help", "-h", "--help" -> printUsage();
+            case "version", "-v", "--version" -> System.out.println("HsmCrypt CLI version " + VERSION);
+            default -> {
                 System.err.println("Unknown command: " + command);
                 printUsage();
                 System.exit(1);
+            }
         }
     }
 

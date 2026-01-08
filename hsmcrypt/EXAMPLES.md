@@ -8,12 +8,12 @@ The library includes a CLI tool for encrypting values and verifying encrypted va
 
 **Encrypt a value:**
 ```bash
-java -jar hsmcrypt-1.17.0-exec.jar enc "password123"
+java -jar hsmcrypt-1.21.0-exec.jar enc "password123"
 ```
 
 **Verify encryption:**
 ```bash
-java -jar hsmcrypt-1.17.0-exec.jar vrf "password123:HCENC(3f8a7b2c...)"
+java -jar hsmcrypt-1.21.0-exec.jar vrf "password123:HCENC(3f8a7b2c...)"
 ```
 
 Note: The CLI tool requires `application.yml` with HSM configuration in the current directory.
@@ -90,17 +90,17 @@ External users cannot directly access encryption/decryption methods. Use one of 
 
 ### CLI Usage
 
-The CLI tool (`hsmcrypt-1.17.0-exec.jar`) provides two commands:
+The CLI tool (`hsmcrypt-1.21.0-exec.jar`) provides two commands:
 
 **enc** - Encrypt a value:
 ```bash
-java -jar hsmcrypt-1.17.0-exec.jar enc "plaintext"
+java -jar hsmcrypt-1.21.0-exec.jar enc "plaintext"
 # Output: HCENC(3f8a7b2c...)
 ```
 
 **vrf** - Verify encryption (format: `plaintext:encrypted`):
 ```bash
-java -jar hsmcrypt-1.17.0-exec.jar vrf "plaintext:HCENC(3f8a7b2c...)"
+java -jar hsmcrypt-1.21.0-exec.jar vrf "plaintext:HCENC(3f8a7b2c...)"
 # Output: Verification successful / Verification failed
 ```
 

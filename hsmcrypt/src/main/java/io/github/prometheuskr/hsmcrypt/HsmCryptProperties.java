@@ -17,9 +17,14 @@ import lombok.NoArgsConstructor;
  * @author Prometheus
  */
 @Data
-@NoArgsConstructor
 @ConfigurationProperties(prefix = "hsmcrypt")
 public class HsmCryptProperties {
+
+    /**
+     * Default constructor.
+     */
+    public HsmCryptProperties() {
+    }
 
     /**
      * Default key label for HSM encryption key.
@@ -45,8 +50,13 @@ public class HsmCryptProperties {
      * Encryption configuration properties.
      */
     @Data
-    @NoArgsConstructor
     public static class Encryption {
+        /**
+         * Default constructor.
+         */
+        public Encryption() {
+        }
+
         /**
          * Flag to enable or disable encryption functionality.
          */

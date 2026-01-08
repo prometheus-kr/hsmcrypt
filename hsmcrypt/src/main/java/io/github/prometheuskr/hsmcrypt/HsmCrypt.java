@@ -1,6 +1,8 @@
 package io.github.prometheuskr.hsmcrypt;
 
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.HexFormat;
 
 import iaik.pkcs.pkcs11.TokenException;
 import io.github.prometheuskr.sipwon.constant.HsmKeyType;
@@ -149,20 +151,17 @@ class HsmCrypt {
      */
     private String encodeWithRandomizationAndPadding(String str) {
         var hex = new StringBuilder();
+        var hexFormat = HexFormat.of();
 
         // Add random first block
-        var random = new java.security.SecureRandom();
+        var random = new SecureRandom();
         var randomBlock = new byte[RANDOM_PREFIX_BYTES];
         random.nextBytes(randomBlock);
-        for (var b : randomBlock) {
-            hex.append(String.format("%02x", b));
-        }
+        hex.append(hexFormat.formatHex(randomBlock));
 
         // Add actual data
-        var bytes = str.getBytes(java.nio.charset.StandardCharsets.UTF_8);
-        for (var b : bytes) {
-            hex.append(String.format("%02x", b));
-        }
+        var bytes = str.getBytes(StandardCharsets.UTF_8);
+        hex.append(hexFormat.formatHex(bytes));
 
         // Add padding: 80 followed by 00s to make it multiple of 32 hex chars (16 bytes
         // for AES)
@@ -204,12 +203,8 @@ class HsmCrypt {
             }
         }
 
-        var len = hex.length();
-        var bytes = new byte[len / 2];
-        for (var i = 0; i < len; i += 2) {
-            bytes[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i + 1), 16));
-        }
+        var hexFormat = HexFormat.of();
+        var bytes = hexFormat.parseHex(hex);
         return new String(bytes, StandardCharsets.UTF_8);
     }
 }

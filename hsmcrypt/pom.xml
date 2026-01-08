@@ -12,7 +12,7 @@
 
     <groupId>io.github.prometheus-kr</groupId>
     <artifactId>hsmcrypt</artifactId>
-    <version>1.17.0</version>
+    <version>1.21.0</version>
     <packaging>jar</packaging>
     
     <name>hsmcrypt</name>
@@ -54,11 +54,11 @@
     </distributionManagement>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sipwon.version>1.17.0</sipwon.version>
+        <sipwon.version>1.21.0</sipwon.version>
     </properties>
 
     <dependencies>
@@ -139,6 +139,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.6.3</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

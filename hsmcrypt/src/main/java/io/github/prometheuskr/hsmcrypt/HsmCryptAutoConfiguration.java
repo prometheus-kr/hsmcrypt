@@ -26,6 +26,12 @@ import io.github.prometheuskr.sipwon.session.HsmSessionFactory;
 public class HsmCryptAutoConfiguration {
 
     /**
+     * Default constructor.
+     */
+    public HsmCryptAutoConfiguration() {
+    }
+
+    /**
      * Creates an HsmCrypt bean.
      * <p>
      * This bean is only created when the 'hsmcrypt.encryption.enabled' property is

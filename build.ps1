@@ -8,14 +8,14 @@ Write-Host "HsmCrypt Multi-Module Build" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Set JAVA_HOME to JDK 17 if available
-$jdk17Path = "C:\d\dev\jdk-17"
-if (Test-Path $jdk17Path) {
-    $env:JAVA_HOME = $jdk17Path
-    $env:Path = "$jdk17Path\bin;$env:Path"
-    Write-Host "JAVA_HOME set to $jdk17Path" -ForegroundColor Cyan
+# Set JAVA_HOME to JDK 21 if available
+$jdk21Path = "C:\d\dev\jdk-21"
+if (Test-Path $jdk21Path) {
+    $env:JAVA_HOME = $jdk21Path
+    $env:Path = "$jdk21Path\bin;$env:Path"
+    Write-Host "JAVA_HOME set to $jdk21Path" -ForegroundColor Cyan
 } else {
-    Write-Host "Warning: JDK 17 not found at $jdk17Path. Using system default JAVA_HOME." -ForegroundColor Yellow
+    Write-Host "Warning: JDK 21 not found at $jdk21Path. Using system default JAVA_HOME." -ForegroundColor Yellow
 }
 Write-Host ""
 

@@ -4,11 +4,11 @@ Java-based HSM (Hardware Security Module) encryption/decryption library
 
 ## Project Information
 
-- **Language**: Java 17
+- **Language**: Java 21
 - **Build Tool**: Maven
 - **Framework**: Spring Boot 3.5.9
 - **Package**: io.github.prometheuskr.hsmcrypt
-- **Version**: 1.17.0
+- **Version**: 1.21.0
 
 ## Project Structure
 

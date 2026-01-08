@@ -24,13 +24,13 @@ HsmCrypt provides HSM (Hardware Security Module) based encryption/decryption cap
 <dependency>
     <groupId>io.github.prometheuskr</groupId>
     <artifactId>hsmcrypt</artifactId>
-    <version>1.17.0</version>
+    <version>1.21.0</version>
 </dependency>
 ```
 
 ### Gradle
 ```gradle
-implementation 'io.github.prometheuskr:hsmcrypt:1.17.0'
+implementation 'io.github.prometheuskr:hsmcrypt:1.21.0'
 ```
 
 ## Quick Start
@@ -63,10 +63,10 @@ hsmcrypt.encryption.key-label=MY_ENCRYPTION_KEY
 
 ### CLI Usage
 ```bash
-java -jar hsmcrypt-1.17.0-exec.jar enc "MySecretPassword"
+java -jar hsmcrypt-1.21.0-exec.jar enc "MySecretPassword"
 # Output: HCENC(3f8a7b2c1d9e4f5a...)
 
-java -jar hsmcrypt-1.17.0-exec.jar vrf "MySecretPassword:HCENC(3f8a7b2c...)"
+java -jar hsmcrypt-1.21.0-exec.jar vrf "MySecretPassword:HCENC(3f8a7b2c...)"
 # Output: Valid
 # Output: Invalid
 ```
