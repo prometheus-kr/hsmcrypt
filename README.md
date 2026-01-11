@@ -1,6 +1,9 @@
 # HsmCrypt Project
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.prometheus-kr/hsmcrypt.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.prometheus-kr/hsmcrypt)
+[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.java.net/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-brightgreen.svg)](https://spring.io/projects/spring-boot)
 
 HSM-based encryption/decryption library for Spring Boot with automatic property decryption
 
@@ -96,5 +99,6 @@ See [hsmcrypt-example](hsmcrypt-example/README.md) for a full Spring Boot usage 
 Apache License 2.0
 
 ## Links
+- [GitHub Repository](https://github.com/prometheus-kr/hsmcrypt)
 - [SIPWON GitHub](https://github.com/prometheus-kr/sipwon)
 - [Contact](mailto:prometheus@kakao.com)
