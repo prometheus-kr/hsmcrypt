@@ -132,6 +132,7 @@
                     <java>
                         <eclipse>
                             <file>${basedir}/../eclipse-formatter.xml</file>
+                            <version>4.32</version>
                         </eclipse>
                     </java>
                 </configuration>

@@ -45,7 +45,8 @@ public class HsmCryptCli implements CommandLineRunner {
     /**
      * Creates a new CLI instance with the given helper.
      * 
-     * @param hsmCryptHelper the helper for encryption operations
+     * @param hsmCryptHelper
+     *            the helper for encryption operations
      */
     public HsmCryptCli(HsmCryptHelper hsmCryptHelper) {
         this.hsmCryptHelper = hsmCryptHelper;
@@ -56,7 +57,8 @@ public class HsmCryptCli implements CommandLineRunner {
      * <p>
      * Checks for application.yml existence and creates a template if missing.
      * 
-     * @param args command line arguments (enc/vrf and value)
+     * @param args
+     *            command line arguments (enc/vrf and value)
      */
     public static void main(String[] args) {
         // Create application.yml if it doesn't exist and exit
@@ -137,8 +139,10 @@ public class HsmCryptCli implements CommandLineRunner {
      * <li>version - Displays version information</li>
      * </ul>
      * 
-     * @param args command line arguments
-     * @throws Exception if command execution fails
+     * @param args
+     *            command line arguments
+     * @throws Exception
+     *             if command execution fails
      */
     @Override
     public void run(String... args) throws Exception {
@@ -167,8 +171,10 @@ public class HsmCryptCli implements CommandLineRunner {
      * <p>
      * Encrypts the input text and outputs it in HCENC(...) format.
      * 
-     * @param args command line arguments containing the text to encrypt
-     * @throws Exception if encryption fails
+     * @param args
+     *            command line arguments containing the text to encrypt
+     * @throws Exception
+     *             if encryption fails
      */
     private void handleEncrypt(String[] args) throws Exception {
         String input = parseArgs(args);
@@ -189,8 +195,10 @@ public class HsmCryptCli implements CommandLineRunner {
      * Verifies if the encrypted value matches the plaintext.
      * Input format: "plaintext:HCENC(...)"
      * 
-     * @param args command line arguments containing plaintext:encrypted pair
-     * @throws Exception if verification fails
+     * @param args
+     *            command line arguments containing plaintext:encrypted pair
+     * @throws Exception
+     *             if verification fails
      */
     private void handleVerify(String[] args) throws Exception {
         String input = parseArgs(args);
@@ -244,9 +252,11 @@ public class HsmCryptCli implements CommandLineRunner {
     /**
      * Parses command line arguments.
      * 
-     * @param args the command line arguments to parse
+     * @param args
+     *            the command line arguments to parse
      * @return the input text from arguments, or null if not provided
-     * @throws IllegalArgumentException if too many arguments provided
+     * @throws IllegalArgumentException
+     *             if too many arguments provided
      */
     private String parseArgs(String[] args) throws Exception {
         // Exactly one argument is required after the command

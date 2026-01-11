@@ -23,8 +23,7 @@ public class HsmCryptProperties {
     /**
      * Default constructor.
      */
-    public HsmCryptProperties() {
-    }
+    public HsmCryptProperties() {}
 
     /**
      * Default key label for HSM encryption key.
@@ -54,8 +53,7 @@ public class HsmCryptProperties {
         /**
          * Default constructor.
          */
-        public Encryption() {
-        }
+        public Encryption() {}
 
         /**
          * Flag to enable or disable encryption functionality.

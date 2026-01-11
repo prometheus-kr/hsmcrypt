@@ -44,11 +44,11 @@ class HsmCrypt {
      * Creates a HsmCrypt with default AES CBC mechanism.
      * 
      * @param sessionFactory
-     *                       the HSM session factory
+     *            the HSM session factory
      * @param tokenLabel
-     *                       the token label to use
+     *            the token label to use
      * @param keyLabel
-     *                       the key label to use for encryption/decryption
+     *            the key label to use for encryption/decryption
      */
     HsmCrypt(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel) {
         this(sessionFactory, tokenLabel, keyLabel, HsmMechanism.AES_CBC);
@@ -58,13 +58,13 @@ class HsmCrypt {
      * Creates a HsmCrypt with custom AES mechanism.
      * 
      * @param sessionFactory
-     *                       the HSM session factory
+     *            the HSM session factory
      * @param tokenLabel
-     *                       the token label to use
+     *            the token label to use
      * @param keyLabel
-     *                       the key label to use for encryption/decryption
+     *            the key label to use for encryption/decryption
      * @param mechanism
-     *                       the AES encryption mechanism to use
+     *            the AES encryption mechanism to use
      */
     HsmCrypt(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel,
             HsmMechanism mechanism) {
@@ -93,10 +93,10 @@ class HsmCrypt {
      * Use CLI for encryption: java -jar hsmcrypt.jar enc "text"
      * 
      * @param plainText
-     *                  the text to encrypt
+     *            the text to encrypt
      * @return the encrypted text as a hexadecimal string
      * @throws HsmCryptException
-     *                           if encryption fails
+     *             if encryption fails
      */
     String encrypt(String plainText) {
         if (plainText == null) {
@@ -119,10 +119,10 @@ class HsmCrypt {
      * Decrypts the given encrypted string.
      * 
      * @param encryptedText
-     *                      the encrypted text as a hexadecimal string
+     *            the encrypted text as a hexadecimal string
      * @return the decrypted plaintext
      * @throws HsmCryptException
-     *                           if decryption fails
+     *             if decryption fails
      */
     String decrypt(String encryptedText) {
         if (encryptedText == null) {
@@ -140,13 +140,14 @@ class HsmCrypt {
             throw new HsmCryptException("Unexpected error during decryption", e);
         }
     }
-    
+
     /**
      * Encodes a string to hexadecimal with random prefix and padding.
      * Adds a random prefix block at the beginning for randomization, then applies
      * ISO/IEC 9797-1 Padding Method 2: append 0x80 followed by 0x00 bytes.
      * 
-     * @param str the string to encode
+     * @param str
+     *            the string to encode
      * @return hexadecimal string with random prefix and padding
      */
     private String encodeWithRandomizationAndPadding(String str) {
@@ -178,7 +179,8 @@ class HsmCrypt {
      * Removes the random prefix block and ISO/IEC 9797-1 Padding Method 2:
      * 0x80 and trailing 0x00 bytes.
      * 
-     * @param hex the hexadecimal string to decode
+     * @param hex
+     *            the hexadecimal string to decode
      * @return decoded string
      */
     private String decodeWithRandomizationAndPadding(String hex) {

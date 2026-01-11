@@ -54,7 +54,8 @@ class EncryptablePropertyResolver implements BeanFactoryPostProcessor, Ordered {
      * This wrapper uses lazy initialization to obtain HsmCryptHelper bean,
      * ensuring it's only retrieved after all beans are fully initialized.
      * 
-     * @param <T> the source type
+     * @param <T>
+     *            the source type
      */
     private static class EncryptablePropertySourceWrapper<T> extends EnumerablePropertySource<T> {
         private final EnumerablePropertySource<T> delegate;
@@ -64,8 +65,10 @@ class EncryptablePropertyResolver implements BeanFactoryPostProcessor, Ordered {
         /**
          * Creates a new wrapper for the given property source.
          * 
-         * @param delegate    the original property source to wrap
-         * @param beanFactory the bean factory to obtain HsmCryptHelper from
+         * @param delegate
+         *            the original property source to wrap
+         * @param beanFactory
+         *            the bean factory to obtain HsmCryptHelper from
          */
         public EncryptablePropertySourceWrapper(EnumerablePropertySource<T> delegate,
                 ConfigurableListableBeanFactory beanFactory) {
