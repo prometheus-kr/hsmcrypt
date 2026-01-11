@@ -1,0 +1,18 @@
+# 모든 하위 디렉토리에서 mvn clean install -P sign 실행
+
+$ErrorActionPreference = "Stop"
+
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+Write-Host "Root directory: $root"
+
+# 하위의 모든 pom.xml 찾기
+$poms = Get-ChildItem -Path "$root" -Recurse -Filter pom.xml
+Write-Host "Found $($poms.Count) pom.xml files in root directory."
+
+foreach ($pom in $poms) {
+    $dir = $pom.Directory.FullName
+    Write-Host "Running mvn clean install -P sign in $dir"
+    Push-Location $dir
+    mvn clean install -P sign
+    Pop-Location
+}
