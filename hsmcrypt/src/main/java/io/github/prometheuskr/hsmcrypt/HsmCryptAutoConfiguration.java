@@ -33,10 +33,10 @@ public class HsmCryptAutoConfiguration {
      * HsmSessionFactory is auto-configured by sipwon-spring-boot-starter.
      * 
      * @param sessionFactory
-     *                       the HSM session factory (provided by
-     *                       sipwon-spring-boot-starter)
+     *            the HSM session factory (provided by
+     *            sipwon-spring-boot-starter)
      * @param properties
-     *                       the HsmCrypt properties
+     *            the HsmCrypt properties
      * @return a configured HsmCrypt instance
      */
     @Bean
@@ -61,7 +61,7 @@ public class HsmCryptAutoConfiguration {
      * This bean is only created when HsmCrypt is available.
      * 
      * @param hsmCrypt
-     *                 the HsmCrypt instance
+     *            the HsmCrypt instance
      * @return an HsmCryptHelper instance
      */
     @Bean
@@ -87,11 +87,11 @@ public class HsmCryptAutoConfiguration {
      * Ensures that the AES encryption key exists in HSM.
      * 
      * @param sessionFactory
-     *                       the HSM session factory
+     *            the HSM session factory
      * @param tokenLabel
-     *                       the token label
+     *            the token label
      * @param keyLabel
-     *                       the key label to check
+     *            the key label to check
      */
     private void ensureKeyExists(HsmSessionFactory sessionFactory, String tokenLabel,
             String keyLabel) {

@@ -21,7 +21,7 @@ class HsmCryptHelper {
      * Creates a new HsmCryptHelper with default HCENC(...) format.
      * 
      * @param hsmCrypt
-     *                 the HsmCrypt instance to use
+     *            the HsmCrypt instance to use
      */
     public HsmCryptHelper(HsmCrypt hsmCrypt) {
         if (hsmCrypt == null) {
@@ -38,7 +38,7 @@ class HsmCryptHelper {
      * HCENC(...)).
      * 
      * @param plainText
-     *                  the text to encrypt
+     *            the text to encrypt
      * @return the encrypted text in configured format
      */
     public String encryptWithFormat(String plainText) {
@@ -54,7 +54,7 @@ class HsmCryptHelper {
      * If the text is not encrypted, it returns as-is.
      * 
      * @param text
-     *             the text to decrypt
+     *            the text to decrypt
      * @return the decrypted text or original text if not encrypted
      */
     public String decryptIfEncrypted(String text) {
@@ -67,7 +67,7 @@ class HsmCryptHelper {
      * Checks if the given text is in encrypted format.
      * 
      * @param text
-     *             the text to check
+     *            the text to check
      * @return true if the text is in encrypted format, false otherwise
      */
     private boolean isEncrypted(String text) {
