@@ -13,7 +13,7 @@
 
     <groupId>io.github.prometheus-kr</groupId>
     <artifactId>hsmcrypt-example</artifactId>
-    <version>1.21.0</version>
+    <version>1.21.1</version>
     <packaging>jar</packaging>
 
     <name>hsmcrypt-example</name>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>io.github.prometheus-kr</groupId>
             <artifactId>hsmcrypt</artifactId>
-            <version>1.21.0</version>
+            <version>1.21.1</version>
         </dependency>
 
         <!-- Lombok (Optional) -->

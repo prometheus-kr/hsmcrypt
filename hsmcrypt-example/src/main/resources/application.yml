@@ -23,4 +23,4 @@ hsmcrypt:
 # Application Secrets (example of encrypted value)
 app:
   plain: 1234 # plain value
-  encrypted: HCENC(F459686FE10314CB43FDE8C3C49E55FC) # encrypted value
+  encrypted: HCENC(23C9203A8C0C86387A4069FB9A66B03A) # encrypted value

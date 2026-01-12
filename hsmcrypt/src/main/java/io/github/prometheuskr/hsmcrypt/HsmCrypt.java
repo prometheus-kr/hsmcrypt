@@ -44,11 +44,11 @@ class HsmCrypt {
      * Creates a HsmCrypt with default AES CBC mechanism.
      * 
      * @param sessionFactory
-     *            the HSM session factory
+     *                       the HSM session factory
      * @param tokenLabel
-     *            the token label to use
+     *                       the token label to use
      * @param keyLabel
-     *            the key label to use for encryption/decryption
+     *                       the key label to use for encryption/decryption
      */
     HsmCrypt(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel) {
         this(sessionFactory, tokenLabel, keyLabel, HsmMechanism.AES_CBC);
@@ -58,13 +58,13 @@ class HsmCrypt {
      * Creates a HsmCrypt with custom AES mechanism.
      * 
      * @param sessionFactory
-     *            the HSM session factory
+     *                       the HSM session factory
      * @param tokenLabel
-     *            the token label to use
+     *                       the token label to use
      * @param keyLabel
-     *            the key label to use for encryption/decryption
+     *                       the key label to use for encryption/decryption
      * @param mechanism
-     *            the AES encryption mechanism to use
+     *                       the AES encryption mechanism to use
      */
     HsmCrypt(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel,
             HsmMechanism mechanism) {
@@ -93,10 +93,10 @@ class HsmCrypt {
      * Use CLI for encryption: java -jar hsmcrypt.jar enc "text"
      * 
      * @param plainText
-     *            the text to encrypt
+     *                  the text to encrypt
      * @return the encrypted text as a hexadecimal string
      * @throws HsmCryptException
-     *             if encryption fails
+     *                           if encryption fails
      */
     String encrypt(String plainText) {
         if (plainText == null) {
@@ -119,10 +119,10 @@ class HsmCrypt {
      * Decrypts the given encrypted string.
      * 
      * @param encryptedText
-     *            the encrypted text as a hexadecimal string
+     *                      the encrypted text as a hexadecimal string
      * @return the decrypted plaintext
      * @throws HsmCryptException
-     *             if decryption fails
+     *                           if decryption fails
      */
     String decrypt(String encryptedText) {
         if (encryptedText == null) {
@@ -145,31 +145,43 @@ class HsmCrypt {
      * Encodes a string to hexadecimal with random prefix and padding.
      * Adds a random prefix block at the beginning for randomization, then applies
      * ISO/IEC 9797-1 Padding Method 2: append 0x80 followed by 0x00 bytes.
+     * The random prefix is XORed with the actual data for additional obfuscation.
      * 
      * @param str
      *            the string to encode
      * @return hexadecimal string with random prefix and padding
      */
     private String encodeWithRandomizationAndPadding(String str) {
-        var hex = new StringBuilder();
         var hexFormat = HexFormat.of();
 
-        // Add random first block
+        // Generate random prefix block
         var random = new SecureRandom();
         var randomBlock = new byte[RANDOM_PREFIX_BYTES];
         random.nextBytes(randomBlock);
-        hex.append(hexFormat.formatHex(randomBlock));
 
-        // Add actual data
-        var bytes = str.getBytes(StandardCharsets.UTF_8);
-        hex.append(hexFormat.formatHex(bytes));
+        // Convert actual data to bytes
+        var dataBytes = str.getBytes(StandardCharsets.UTF_8);
 
-        // Add padding: 80 followed by 00s to make it multiple of 32 hex chars (16 bytes
-        // for AES)
-        hex.append("80");
-        while (hex.length() % 32 != 0) {
-            hex.append("00");
+        // Calculate total size with padding (including random prefix)
+        int totalDataSize = RANDOM_PREFIX_BYTES + dataBytes.length + 1; // random + data + 0x80
+        int paddingSize = (16 - (totalDataSize % 16)) % 16;
+        int totalSize = dataBytes.length + 1 + paddingSize;
+
+        // Create buffer for data + padding
+        var buffer = new byte[totalSize];
+        System.arraycopy(dataBytes, 0, buffer, 0, dataBytes.length);
+        buffer[dataBytes.length] = (byte) 0x80; // ISO/IEC 9797-1 padding
+        // Remaining bytes are already 0x00
+
+        // XOR buffer with random prefix (repeating)
+        for (int i = 0; i < buffer.length; i++) {
+            buffer[i] ^= randomBlock[i % RANDOM_PREFIX_BYTES];
         }
+
+        // Build final hex string: random prefix + XORed data
+        var hex = new StringBuilder();
+        hex.append(hexFormat.formatHex(randomBlock));
+        hex.append(hexFormat.formatHex(buffer));
 
         return hex.toString();
     }
@@ -178,35 +190,58 @@ class HsmCrypt {
      * Decodes a hexadecimal string by removing random prefix and padding.
      * Removes the random prefix block and ISO/IEC 9797-1 Padding Method 2:
      * 0x80 and trailing 0x00 bytes.
+     * The random prefix is XORed with the data to restore the original content.
      * 
      * @param hex
      *            the hexadecimal string to decode
      * @return decoded string
      */
     private String decodeWithRandomizationAndPadding(String hex) {
-        // Remove first random block
-        if (hex.length() > RANDOM_PREFIX_HEX_LENGTH) {
-            hex = hex.substring(RANDOM_PREFIX_HEX_LENGTH);
+        var hexFormat = HexFormat.of();
+
+        // Extract random prefix
+        if (hex.length() <= RANDOM_PREFIX_HEX_LENGTH) {
+            throw new HsmCryptException("Invalid encrypted data: too short");
         }
 
-        // Remove padding: find last 80 and remove it and all trailing 00s
-        int paddingStart = hex.lastIndexOf("80");
-        if (paddingStart > 0) {
-            // Check if everything after 80 is 00
-            boolean validPadding = true;
-            for (int i = paddingStart + 2; i < hex.length(); i += 2) {
-                if (!hex.substring(i, i + 2).equals("00")) {
-                    validPadding = false;
+        String randomHex = hex.substring(0, RANDOM_PREFIX_HEX_LENGTH);
+        String xoredDataHex = hex.substring(RANDOM_PREFIX_HEX_LENGTH);
+
+        var randomBlock = hexFormat.parseHex(randomHex);
+        var xoredData = hexFormat.parseHex(xoredDataHex);
+
+        // XOR back to restore original data
+        for (int i = 0; i < xoredData.length; i++) {
+            xoredData[i] ^= randomBlock[i % RANDOM_PREFIX_BYTES];
+        }
+
+        // Remove padding: find 0x80 and remove it and all trailing 0x00s
+        int paddingStart = -1;
+        for (int i = xoredData.length - 1; i >= 0; i--) {
+            if (xoredData[i] == (byte) 0x80) {
+                // Verify everything after this is 0x00
+                boolean validPadding = true;
+                for (int j = i + 1; j < xoredData.length; j++) {
+                    if (xoredData[j] != 0x00) {
+                        validPadding = false;
+                        break;
+                    }
+                }
+                if (validPadding) {
+                    paddingStart = i;
                     break;
                 }
             }
-            if (validPadding) {
-                hex = hex.substring(0, paddingStart);
-            }
         }
 
-        var hexFormat = HexFormat.of();
-        var bytes = hexFormat.parseHex(hex);
-        return new String(bytes, StandardCharsets.UTF_8);
+        if (paddingStart < 0) {
+            throw new HsmCryptException("Invalid padding: 0x80 marker not found");
+        }
+
+        // Extract actual data (before padding)
+        var actualData = new byte[paddingStart];
+        System.arraycopy(xoredData, 0, actualData, 0, paddingStart);
+
+        return new String(actualData, StandardCharsets.UTF_8);
     }
 }
