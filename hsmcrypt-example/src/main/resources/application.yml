@@ -7,10 +7,12 @@ spring:
 
 # Sipwon HSM Configuration (provided by sipwon-spring-boot-starter)
 sipwon:
-  pkcs11-library-path: /Program Files/Safenet/ProtectToolkit 7/C SDK/bin/sw/cryptoki.dll
-  token-label-and-pin:
-    - token-label: HSMCRYPT
-      pin: 1111
+  configs:
+    hsm1:
+      pkcs11-library-path: /Program Files/Safenet/ProtectToolkit 7/C SDK/bin/sw/cryptoki.dll
+      token-label-and-pin:
+        - token-label: HSMCRYPT
+          pin: 1111
 
 # HsmCrypt Encryption Configuration
 hsmcrypt:

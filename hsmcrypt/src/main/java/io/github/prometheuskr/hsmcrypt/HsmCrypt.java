@@ -6,7 +6,7 @@ import java.util.HexFormat;
 
 import iaik.pkcs.pkcs11.TokenException;
 import io.github.prometheuskr.sipwon.constant.HsmKeyType;
-import io.github.prometheuskr.sipwon.constant.HsmMechanism;
+import io.github.prometheuskr.sipwon.constant.HsmMechanism.HsmCypherMode;
 import io.github.prometheuskr.sipwon.key.HsmKey;
 import io.github.prometheuskr.sipwon.session.HsmSession;
 import io.github.prometheuskr.sipwon.session.HsmSessionFactory;
@@ -37,54 +37,49 @@ class HsmCrypt {
 
     private final HsmSessionFactory sessionFactory;
     private final String keyLabel;
-    private final String tokenLabel;
-    private final HsmMechanism mechanism;
+    private final HsmCypherMode cypherMode;
 
     /**
      * Creates a HsmCrypt with default AES CBC mechanism.
      * 
      * @param sessionFactory
-     *                       the HSM session factory
+     *            the HSM session factory
      * @param tokenLabel
-     *                       the token label to use
+     *            the token label to use
      * @param keyLabel
-     *                       the key label to use for encryption/decryption
+     *            the key label to use for encryption/decryption
      */
-    HsmCrypt(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel) {
-        this(sessionFactory, tokenLabel, keyLabel, HsmMechanism.AES_CBC);
+    HsmCrypt(HsmSessionFactory sessionFactory, String keyLabel) {
+        this(sessionFactory, keyLabel, HsmCypherMode.CBC);
     }
 
     /**
      * Creates a HsmCrypt with custom AES mechanism.
      * 
      * @param sessionFactory
-     *                       the HSM session factory
+     *            the HSM session factory
      * @param tokenLabel
-     *                       the token label to use
+     *            the token label to use
      * @param keyLabel
-     *                       the key label to use for encryption/decryption
-     * @param mechanism
-     *                       the AES encryption mechanism to use
+     *            the key label to use for encryption/decryption
+     * @param cypherMode
+     *            the cipher mode to use
      */
-    HsmCrypt(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel,
-            HsmMechanism mechanism) {
+    HsmCrypt(HsmSessionFactory sessionFactory, String keyLabel,
+            HsmCypherMode cypherMode) {
         if (sessionFactory == null) {
             throw new IllegalArgumentException("sessionFactory cannot be null");
-        }
-        if (tokenLabel == null || tokenLabel.isEmpty()) {
-            throw new IllegalArgumentException("tokenLabel cannot be null or empty");
         }
         if (keyLabel == null || keyLabel.isEmpty()) {
             throw new IllegalArgumentException("keyLabel cannot be null or empty");
         }
-        if (mechanism == null) {
-            throw new IllegalArgumentException("mechanism cannot be null");
+        if (cypherMode == null) {
+            throw new IllegalArgumentException("cypherMode cannot be null");
         }
 
         this.sessionFactory = sessionFactory;
-        this.tokenLabel = tokenLabel;
         this.keyLabel = keyLabel;
-        this.mechanism = mechanism;
+        this.cypherMode = cypherMode;
     }
 
     /**
@@ -93,21 +88,21 @@ class HsmCrypt {
      * Use CLI for encryption: java -jar hsmcrypt.jar enc "text"
      * 
      * @param plainText
-     *                  the text to encrypt
+     *            the text to encrypt
      * @return the encrypted text as a hexadecimal string
      * @throws HsmCryptException
-     *                           if encryption fails
+     *             if encryption fails
      */
     String encrypt(String plainText) {
         if (plainText == null) {
             return null;
         }
 
-        try (HsmSession session = sessionFactory.getHsmSession(tokenLabel)) {
+        try (HsmSession session = sessionFactory.getHsmSession()) {
             HsmKey key = session.findHsmKey(keyLabel, HsmKeyType.AES);
             // Convert plaintext to hex string with padding
             String hexPlainText = encodeWithRandomizationAndPadding(plainText);
-            return key.encrypt(hexPlainText, mechanism);
+            return key.encrypt(hexPlainText, cypherMode);
         } catch (TokenException e) {
             throw new HsmCryptException("Failed to encrypt data", e);
         } catch (Exception e) {
@@ -119,19 +114,19 @@ class HsmCrypt {
      * Decrypts the given encrypted string.
      * 
      * @param encryptedText
-     *                      the encrypted text as a hexadecimal string
+     *            the encrypted text as a hexadecimal string
      * @return the decrypted plaintext
      * @throws HsmCryptException
-     *                           if decryption fails
+     *             if decryption fails
      */
     String decrypt(String encryptedText) {
         if (encryptedText == null) {
             return null;
         }
 
-        try (HsmSession session = sessionFactory.getHsmSession(tokenLabel)) {
+        try (HsmSession session = sessionFactory.getHsmSession()) {
             HsmKey key = session.findHsmKey(keyLabel, HsmKeyType.AES);
-            String hexDecrypted = key.decrypt(encryptedText, mechanism);
+            String hexDecrypted = key.decrypt(encryptedText, cypherMode);
             // Convert hex string back to plaintext
             return decodeWithRandomizationAndPadding(hexDecrypted);
         } catch (TokenException e) {

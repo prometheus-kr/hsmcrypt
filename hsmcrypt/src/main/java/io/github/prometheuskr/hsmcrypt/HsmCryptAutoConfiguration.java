@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import iaik.pkcs.pkcs11.TokenException;
+import io.github.prometheuskr.sipwon.autoconfig.HsmSessionFactoryRegistry;
 import io.github.prometheuskr.sipwon.constant.HsmKeyType;
-import io.github.prometheuskr.sipwon.constant.HsmMechanism;
+import io.github.prometheuskr.sipwon.constant.HsmMechanism.HsmCypherMode;
 import io.github.prometheuskr.sipwon.session.HsmSession;
 import io.github.prometheuskr.sipwon.session.HsmSessionFactory;
 
@@ -17,7 +18,7 @@ import io.github.prometheuskr.sipwon.session.HsmSessionFactory;
  * <p>
  * This configuration class is activated automatically and provides beans for
  * HSM-based encryption similar to Jasypt functionality.
- * Uses sipwon-spring-boot-starter for HsmSessionFactory auto-configuration.
+ * Uses sipwon-spring-boot-starter for HsmSessionFactoryRegistry auto-configuration.
  * 
  * @author Prometheus
  */
@@ -35,10 +36,10 @@ public class HsmCryptAutoConfiguration {
      * <p>
      * This bean is only created when the 'hsmcrypt.encryption.enabled' property is
      * set to true.
-     * HsmSessionFactory is auto-configured by sipwon-spring-boot-starter.
+     * HsmSessionFactoryRegistry is auto-configured by sipwon-spring-boot-starter.
      * 
-     * @param sessionFactory
-     *            the HSM session factory (provided by
+     * @param hsmSessionFactoryRegistry
+     *            the HSM session factory registry (provided by
      *            sipwon-spring-boot-starter)
      * @param properties
      *            the HsmCrypt properties
@@ -47,17 +48,17 @@ public class HsmCryptAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(HsmCrypt.class)
     @ConditionalOnProperty(prefix = "hsmcrypt.encryption", name = "enabled", havingValue = "true")
-    public HsmCrypt hsmCrypt(HsmSessionFactory sessionFactory, HsmCryptProperties properties) {
+    public HsmCrypt hsmCrypt(HsmSessionFactoryRegistry hsmSessionFactoryRegistry, HsmCryptProperties properties) {
         HsmCryptProperties.Encryption encConfig = properties.getEncryption();
 
         // Ensure AES key exists in HSM
-        ensureKeyExists(sessionFactory, encConfig.getTokenLabel(), encConfig.getKeyLabel());
+        ensureKeyExists(hsmSessionFactoryRegistry.getFactory(encConfig.getTokenLabel()), encConfig.getTokenLabel(),
+                encConfig.getKeyLabel());
 
         return new HsmCrypt(
-                sessionFactory,
-                encConfig.getTokenLabel(),
+                hsmSessionFactoryRegistry.getFactory(encConfig.getTokenLabel()),
                 encConfig.getKeyLabel(),
-                HsmMechanism.AES_CBC);
+                HsmCypherMode.CBC);
     }
 
     /**
@@ -99,11 +100,10 @@ public class HsmCryptAutoConfiguration {
      * @param keyLabel
      *            the key label to check
      */
-    private void ensureKeyExists(HsmSessionFactory sessionFactory, String tokenLabel,
-            String keyLabel) {
+    private void ensureKeyExists(HsmSessionFactory sessionFactory, String tokenLabel, String keyLabel) {
         try {
             // Try to find the AES key
-            try (HsmSession session = sessionFactory.getHsmSession(tokenLabel)) {
+            try (HsmSession session = sessionFactory.getHsmSession()) {
                 session.findHsmKey(keyLabel, HsmKeyType.AES);
             }
         } catch (TokenException e) {
